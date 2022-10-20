@@ -12,9 +12,11 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-12]
     steps:
-      - run: lscpu
       - uses: actions/checkout@v3
       - uses: ./
         with:

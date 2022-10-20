@@ -15,7 +15,7 @@ export const getAsset = async (releaseName: string, arch: string) => {
 	const asset = await (async () => {
 		if (releaseName === 'latest') {
 			let release;
-			for (var i = 0; i < 10; i++) {
+			for (var i = 0; i < 30; i++) {
 				try {
 					release = await repo.getRelease(releaseName);
 					break;
@@ -29,7 +29,7 @@ export const getAsset = async (releaseName: string, arch: string) => {
 			return asset;
 		} else {
 			let releases;
-			for (var i = 0; i < 10; i++) {
+			for (var i = 0; i < 30; i++) {
 				try {
 					releases = await repo.listReleases();
 					break;
@@ -62,7 +62,7 @@ export const setupRust = async () => {
 
 export const restoreCache = async (restoreKey: string) => {
 	const restoredCacheKey = await cache.restoreCache(
-		[`${process.env.HOME}/.cache/sccache`], restoreKey, [`${restoreKey}-`]);
+		[`${process.env.HOME}/.cache/sccache`, `${process.env.HOME}/Library/Caches/Mozilla.sccache`], restoreKey, [`${restoreKey}-`]);
 	if (restoredCacheKey) {
 		core.info(`Cache restored from ${restoredCacheKey}.`);
 	} else {
@@ -79,7 +79,18 @@ export const run = async () => {
 		const restoreKey = core.getInput('cache-key');
 		console.log(`Using restoreKey: ${restoreKey}`);
 		const releaseName = core.getInput('release-name');
-		const arch = core.getInput('arch');
+		let arch = core.getInput('arch');
+		if (!arch) {
+			// https://docs.github.com/en/actions/learn-github-actions/environment-variables
+			const os = process.env.RUNNER_OS?.toLocaleLowerCase() ?? '';
+			if (os.indexOf('linux') >= 0) {
+				arch = 'x86_64-unknown-linux-musl';
+			} else if (os.indexOf('macos') >= 0) {
+				arch = 'x86_64-apple-darwin';
+			} else {
+				console.log(`Unsupported OS: ${os}`);
+			}
+		}
 		await download(releaseName, arch);
 		await setupRust();
 		await restoreCache(restoreKey);
