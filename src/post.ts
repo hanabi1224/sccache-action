@@ -16,7 +16,7 @@ export const saveCache = async () => {
 		}
 		const cacheKey = `${core.getInput('cache-key')}-${new Date().toISOString()}`;
 		console.log(`Using cacheKey: ${cacheKey}`);
-		await cache.saveCache([`${process.env.HOME}/.cache/sccache`], cacheKey);
+		await cache.saveCache([`${process.env.HOME}/.cache/sccache`, `${process.env.HOME}/Library/Caches/Mozilla.sccache`], cacheKey);
 	} catch (err: any) {
 		core.setFailed(err.message);
 	}
