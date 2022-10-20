@@ -9,6 +9,11 @@ export const showStat = async () => {
 
 export const saveCache = async () => {
 	try {
+		const shouldSaveCache = core.getBooleanInput('cache-save');
+		if (!shouldSaveCache) {
+			console.log(`Aborting, shouldSaveCache: ${shouldSaveCache}`);
+			return;
+		}
 		const cacheKey = `${core.getInput('cache-key')}-${new Date().toISOString()}`;
 		console.log(`Using cacheKey: ${cacheKey}`);
 		await cache.saveCache([`${process.env.HOME}/.cache/sccache`], cacheKey);

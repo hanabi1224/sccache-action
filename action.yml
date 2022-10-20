@@ -4,6 +4,9 @@ inputs:
   cache-key:
     description: "The cache key."
     default: "sccache"
+  cache-save:
+    description: "A Flag that indicates whether or not saving the cache"
+    default: true
   release-name:
     description: "The sccache version."
     default: "latest"

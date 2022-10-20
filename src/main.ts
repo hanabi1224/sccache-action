@@ -21,7 +21,7 @@ export const getAsset = async (releaseName: string, arch: string) => {
 					break;
 				} catch (e) {
 					console.log(`Retrying: ${e}`);
-					await sleep(5000);
+					await sleep(30000);
 				}
 			}
 			const asset = release.data.assets.find(
@@ -35,7 +35,7 @@ export const getAsset = async (releaseName: string, arch: string) => {
 					break;
 				} catch (e) {
 					console.log(`Retrying: ${e}`);
-					await sleep(5000);
+					await sleep(30000);
 				}
 			}
 			const release = releases.data.find((release: any) => release.tag_name === releaseName);
