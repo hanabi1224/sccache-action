@@ -21,9 +21,8 @@ jobs:
       - uses: ./
         with:
           cache-key: ${{ runner.os }}-sccache
-          cache-save: ${{ github.event_name != 'pull_request' }}
+          # cache-save: ${{ github.event_name != 'pull_request' }}
       - run: cargo build -v
         env:
           CC: "/tmp/sccache/sccache clang"
           CXX: "/tmp/sccache/sccache clang++"
-# trigger
