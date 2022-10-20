@@ -1,30 +1,25 @@
 name: Rust
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ master ]
+    branches: [forest]
   pull_request:
-    branches: [ master ]
+    branches: [forest]
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Configure sccache
-      uses: ./
-      with:
-        cache-key: sccache-ubuntu-latest
-
-    - name: Build
-      run: cargo build --verbose
-
-    - name: Run tests
-      run: cargo test --verbose
-
+      - run: lscpu
+      - uses: actions/checkout@v3
+      - uses: ./
+        with:
+          cache-key: ${{ runner.os }}-sccache
+      - run: cargo build -v
+        env:
+          CC: "/tmp/sccache/sccache clang"
+          CXX: "/tmp/sccache/sccache clang++"

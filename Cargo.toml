@@ -2,9 +2,10 @@
 name = "sccache-action"
 version = "0.0.1"
 authors = ["Masahiko Hyuga"]
-edition = "2018"
+edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-sccache = "0.2"
+sccache = "0.3"
+# rocksdb = "0.19"
