@@ -22,17 +22,8 @@ jobs:
         with:
           release-name: v0.3.0
           cache-key: ${{ runner.os }}-sccache
-          # cache-save: ${{ github.event_name != 'pull_request' }}
+          cache-suffix: ${{ github.event_name != 'pull_request' }}
       - run: sccache -s
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-          key: ${{ runner.os }}-cargo-bin
-      - run: cargo install --locked mdbook
       - run: cargo build -v
         env:
           CC: "sccache clang"

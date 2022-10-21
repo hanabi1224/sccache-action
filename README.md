@@ -14,6 +14,8 @@ This repository provides GitHub Actions which enables projects to cache the comp
     # Optional
     cache-save: true
     # Optional
+    cache-suffix: true
+    # Optional,  e.g. v0.3.0
     release-name: latest
     # Optional
     arch: x86_64-unknown-linux-musl
