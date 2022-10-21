@@ -7,6 +7,9 @@ inputs:
   cache-save:
     description: "A Flag that indicates whether or not saving the cache"
     default: true
+  cache-suffix:
+    description: "A Flag that indicates whether or not appending timestamp suffix to the cache key when saving"
+    default: true
   release-name:
     description: "The sccache version. e.g. v0.3.0"
     default: "latest"

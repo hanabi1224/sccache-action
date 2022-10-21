@@ -14,7 +14,9 @@ export const saveCache = async () => {
 			console.log(`Aborting, shouldSaveCache: ${shouldSaveCache}`);
 			return;
 		}
-		const cacheKey = `${core.getInput('cache-key')}-${new Date().toISOString()}`;
+		const shouldAppendSuffix = core.getBooleanInput('cache-suffix');
+		console.log(`shouldAppendSuffix: ${shouldAppendSuffix}`);
+		const cacheKey = shouldAppendSuffix ? `${core.getInput('cache-key')}-${new Date().toISOString()}` : core.getInput('cache-key');
 		console.log(`Using cacheKey: ${cacheKey}`);
 		await cache.saveCache([`${process.env.HOME}/.cache/sccache`, `${process.env.HOME}/Library/Caches/Mozilla.sccache`], cacheKey);
 	} catch (err: any) {

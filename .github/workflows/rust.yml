@@ -22,7 +22,7 @@ jobs:
         with:
           release-name: v0.3.0
           cache-key: ${{ runner.os }}-sccache
-          cache-save: ${{ github.event_name != 'pull_request' }}
+          cache-suffix: ${{ github.event_name != 'pull_request' }}
       - run: sccache -s
       - run: cargo build -v
         env:
