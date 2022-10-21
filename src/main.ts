@@ -1,6 +1,6 @@
 
 import { writeFileSync } from 'fs';
-const GitHub = require('github-api');
+import { Octokit } from "@octokit/rest";
 import * as core from '@actions/core';
 import * as cache from '@actions/cache';
 import { exec } from '@actions/exec';
@@ -10,14 +10,16 @@ function sleep(ms: number) {
 }
 
 export const getAsset = async (releaseName: string, arch: string) => {
-	const gh = new GitHub();
-	const repo = gh.getRepo('mozilla', 'sccache');
+	const octokit = new Octokit({
+		'auth': process.env.GITHUB_TOKEN,
+	});
+	const repo = { owner: 'mozilla', repo: 'sccache' };
 	const asset = await (async () => {
 		if (releaseName === 'latest') {
-			let release;
+			let release: any;
 			for (var i = 0; i < 30; i++) {
 				try {
-					release = await repo.getRelease(releaseName);
+					release = await octokit.request('GET /repos/{owner}/{repo}/releases/latest', repo);
 					break;
 				} catch (e) {
 					console.log(`Retrying: ${e}`);
@@ -28,10 +30,10 @@ export const getAsset = async (releaseName: string, arch: string) => {
 				(asset: any) => new RegExp(`^sccache-v(.*?)-${arch}.tar.gz$`).test(asset.name));
 			return asset;
 		} else {
-			let releases;
+			let releases: any;
 			for (var i = 0; i < 30; i++) {
 				try {
-					releases = await repo.listReleases();
+					releases = await octokit.request('GET /repos/{owner}/{repo}/releases', repo);
 					break;
 				} catch (e) {
 					console.log(`Retrying: ${e}`);
