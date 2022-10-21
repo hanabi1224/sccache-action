@@ -21,8 +21,8 @@ jobs:
       - uses: ./
         with:
           release-name: v0.3.0
-          cache-key: ${{ runner.os }}-sccache
-          cache-suffix: ${{ github.event_name != 'pull_request' }}
+          cache-key: ${{ runner.os }}-sccache-v1.2
+          cache-update: ${{ github.event_name != 'pull_request' }}
       - run: sccache -s
       - run: cargo build -v
         env:

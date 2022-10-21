@@ -2,6 +2,7 @@
 import * as core from '@actions/core';
 import * as cache from '@actions/cache';
 import { exec } from '@actions/exec';
+import { State } from './constants';
 
 export const showStat = async () => {
 	await exec("sccache -s");
@@ -9,14 +10,24 @@ export const showStat = async () => {
 
 export const saveCache = async () => {
 	try {
-		const shouldSaveCache = core.getBooleanInput('cache-save');
+		let shouldSaveCache = core.getBooleanInput('cache-save');
 		if (!shouldSaveCache) {
 			console.log(`Aborting, shouldSaveCache: ${shouldSaveCache}`);
 			return;
 		}
-		const shouldAppendSuffix = core.getBooleanInput('cache-suffix');
-		console.log(`shouldAppendSuffix: ${shouldAppendSuffix}`);
-		const cacheKey = shouldAppendSuffix ? `${core.getInput('cache-key')}-${new Date().toISOString()}` : core.getInput('cache-key');
+		let shouldUpdateCache = core.getBooleanInput('cache-update');
+		if (!shouldUpdateCache) {
+			const cacheKey = core.getState(State.RestoredCacheKey);
+			console.log(`cacheKey: ${cacheKey}`);
+			if (!cacheKey) {
+				shouldUpdateCache = true;
+			}
+		}
+		if (!shouldUpdateCache) {
+			console.log(`Aborting, shouldUpdateCache: ${shouldUpdateCache}`);
+			return;
+		}
+		const cacheKey = `${core.getInput('cache-key')}-${new Date().toISOString()}`;
 		console.log(`Using cacheKey: ${cacheKey}`);
 		await cache.saveCache([`${process.env.HOME}/.cache/sccache`, `${process.env.HOME}/Library/Caches/Mozilla.sccache`], cacheKey);
 	} catch (err: any) {
