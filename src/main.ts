@@ -4,6 +4,7 @@ import { Octokit } from "@octokit/rest";
 import * as core from '@actions/core';
 import * as cache from '@actions/cache';
 import { exec } from '@actions/exec';
+import { State } from './constants';
 
 function sleep(ms: number) {
 	return new Promise(resolve => setTimeout(resolve, ms));
@@ -77,6 +78,7 @@ export const restoreCache = async (restoreKey: string) => {
 		[`${process.env.HOME}/.cache/sccache`, `${process.env.HOME}/Library/Caches/Mozilla.sccache`], restoreKey, [`${restoreKey}-`]);
 	if (restoredCacheKey) {
 		core.info(`Cache restored from ${restoredCacheKey}.`);
+		core.saveState(State.RestoredCacheKey, restoredCacheKey);
 	} else {
 		core.info("Cache not found.");
 	}

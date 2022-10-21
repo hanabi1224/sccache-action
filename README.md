@@ -11,10 +11,10 @@ This repository provides GitHub Actions which enables projects to cache the comp
   with:
     # Optional
     cache-key: sccache-ubuntu-latest
-    # Optional
+    # Optional, whether or not saving the cache
     cache-save: true
-    # Optional
-    cache-suffix: true
+    # Optional whether or not updating cache when hit
+    cache-update: true
     # Optional,  e.g. v0.3.0
     release-name: latest
     # Optional
