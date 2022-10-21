@@ -28,3 +28,4 @@ jobs:
         env:
           CC: "sccache clang"
           CXX: "sccache clang++"
+# kick
