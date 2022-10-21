@@ -8,7 +8,7 @@ inputs:
     description: "A Flag that indicates whether or not saving the cache"
     default: true
   release-name:
-    description: "The sccache version."
+    description: "The sccache version. e.g. v0.3.0"
     default: "latest"
   arch:
     description: "The sccache binary architecture."

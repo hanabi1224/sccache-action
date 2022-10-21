@@ -50,16 +50,26 @@ export const getAsset = async (releaseName: string, arch: string) => {
 };
 
 export const download = async (releaseName: string, arch: string) => {
-	const asset = await getAsset(releaseName, arch);
-	await exec(`curl "${asset.browser_download_url}" -L -o /tmp/sccache.tar.gz`);
+	let name;
+	let download_url;
+	if (releaseName === 'latest') {
+		const asset = await getAsset(releaseName, arch);
+		name = asset.name;
+		download_url = asset.browser_download_url
+	} else {
+		name = `sccache-${releaseName}-${arch}.tar.gz`;
+		download_url = `https://github.com/mozilla/sccache/releases/download/${releaseName}/${name}`;
+	}
+	await exec(`curl "${download_url}" -L -o /tmp/sccache.tar.gz`);
 	await exec("tar xvf /tmp/sccache.tar.gz -C /tmp");
-	await exec(`mv /tmp/${asset.name.replace('.tar.gz', '')} /tmp/sccache`);
+	await exec(`mv /tmp/${name.replace('.tar.gz', '')} /tmp/sccache`);
 	await exec("chmod +x /tmp/sccache/sccache");
+	await exec("ln -sf /tmp/sccache/sccache /usr/local/bin/sccache");
 };
 
 export const setupRust = async () => {
-	await exec(`echo "[build]\nrustc-wrapper = \\"/tmp/sccache/sccache\\"" | tee ~/.cargo/config`)
-	writeFileSync(`${process.env.HOME}/.cargo/config`, `[build]\nrustc-wrapper = "/tmp/sccache/sccache"\n`);
+	await exec(`echo "[build]\nrustc-wrapper = \\"sccache\\"" | tee ~/.cargo/config`)
+	writeFileSync(`${process.env.HOME}/.cargo/config`, `[build]\nrustc-wrapper = "sccache"\n`);
 };
 
 export const restoreCache = async (restoreKey: string) => {
@@ -73,7 +83,7 @@ export const restoreCache = async (restoreKey: string) => {
 };
 
 export const resetStat = async () => {
-	await exec("/tmp/sccache/sccache -z");
+	await exec("sccache -z");
 };
 
 export const run = async () => {
