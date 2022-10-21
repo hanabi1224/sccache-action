@@ -4,7 +4,7 @@ import * as cache from '@actions/cache';
 import { exec } from '@actions/exec';
 
 export const showStat = async () => {
-	await exec("/tmp/sccache/sccache -s");
+	await exec("sccache -s");
 };
 
 export const saveCache = async () => {
