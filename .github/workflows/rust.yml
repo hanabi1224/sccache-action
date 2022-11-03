@@ -15,16 +15,16 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-22.04]
     steps:
       - uses: actions/checkout@v3
       - uses: ./
         with:
-          release-name: v0.3.0
+          release-name: v0.3.1
           cache-key: ${{ runner.os }}-sccache-v1.2
           cache-update: ${{ github.event_name != 'pull_request' }}
       - run: sccache -s
       - run: cargo build -v
         env:
-          CC: "sccache clang"
-          CXX: "sccache clang++"
+          CC: "sccache clang-14"
+          CXX: "sccache clang++-14"
