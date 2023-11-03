@@ -23,3 +23,9 @@ This repository provides GitHub Actions which enables projects to cache the comp
 
 - The `release-name` parameter is the version name listed in [sccache's release page](https://github.com/mozilla/sccache/releases).
 - The `arch` parameter is the string included in the binary release `.tar.gz`. For ubuntu, use "x86_64-unknown-linux-musl".
+
+## Build
+
+```
+npm run build:main && npm run build:post
+```
