@@ -15,6 +15,8 @@ This repository provides GitHub Actions which enables projects to cache the comp
     cache-save: true
     # Optional whether or not updating cache when hit
     cache-update: true
+    # Optional whether to put the date-time string into the cache key
+    cache-date: true
     # Optional,  e.g. v0.3.0
     release-name: latest
     # Optional
@@ -25,6 +27,8 @@ This repository provides GitHub Actions which enables projects to cache the comp
 - The `arch` parameter is the string included in the binary release `.tar.gz`. For ubuntu, use "x86_64-unknown-linux-musl".
 
 ## Build
+
+Make sure you have `ncc` installed: `sudo npm i -g @vercel/ncc`
 
 ```
 npm run build:main && npm run build:post
